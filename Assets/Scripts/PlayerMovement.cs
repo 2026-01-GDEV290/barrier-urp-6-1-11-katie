@@ -2,28 +2,39 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementCC : MonoBehaviour
 {
+    public float speed = 5f;
+    public float jump = 2f;
+    public float gravity = -10;
 
-    public float speed = 5.0f;
-    private float horizontalInput;
-    private float forwardInput;
+    private CharacterController cc;
+    private Vector3 velocity;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        cc = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // get the player's input
-        horizontalInput = Input.GetAxis("Horizontal");
-        forwardInput = Input.GetAxis("Vertical");
-        
-        // move the player forward
-        transform.Translate(Vector3.forward * Time.deltaTime * speed * forwardInput);
-        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);
+
+        //move the player along the x and z axis
+        Vector3 move = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
+        cc.Move(move * speed * Time.deltaTime);
+
+        // player jump (y axis movement)
+        if (cc.isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && cc.isGrounded)   
+        {
+            velocity.y = Mathf.Sqrt(jump * -2f * gravity);
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+        cc.Move(velocity * Time.deltaTime);
     }
-}
+}              
