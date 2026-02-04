@@ -32,7 +32,7 @@ public class GunShoot : MonoBehaviour
         Destroy(projectile, 10);
 
         // propells projectile forwards
-        projectile.GetComponent<Rigidbody>().AddForce((destination - projectile.transform.position).normalized * 50.0f, ForceMode.Impulse);
+        projectile.GetComponent<Rigidbody>().AddForce((destination - projectile.transform.position).normalized * 500.0f, ForceMode.Impulse);
 
     }
 
